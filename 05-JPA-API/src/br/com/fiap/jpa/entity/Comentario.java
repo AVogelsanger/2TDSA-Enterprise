@@ -19,7 +19,7 @@ public class Comentario {
 
 	@Id
 	@Column(name="CD_Comentario", nullable=false)
-	@GeneratedValue(generator="comentario", strategy=GenerationType.SEQUENCE)
+	@GeneratedValue(generator="Coment", strategy=GenerationType.SEQUENCE)
 	private int codigo;
 	
 	@Temporal(TemporalType.TIMESTAMP)
