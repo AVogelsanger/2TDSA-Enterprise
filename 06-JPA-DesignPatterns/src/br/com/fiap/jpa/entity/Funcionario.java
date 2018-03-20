@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="T_FUNCIONARIO")
-@SequenceGenerator(name="func", sequenceName="SQ_T_FUNCIONARIO", allocationSize=1)
+@SequenceGenerator(name="funcionario", sequenceName="SQ_T_FUNCIONARIO", allocationSize=1)
 public class Funcionario implements Serializable{
 
 	/**

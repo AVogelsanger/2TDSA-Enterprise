@@ -1,5 +1,6 @@
 package br.com.fiap.jpa.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -10,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
@@ -21,7 +24,7 @@ import javax.persistence.Table;
 public class Time {
 
 	@Id
-	@Column(name="cd=time")
+	@Column(name="cd_time")
 	@GeneratedValue(generator="time", strategy=GenerationType.SEQUENCE)
 	private int codigo;
 	
@@ -35,8 +38,25 @@ public class Time {
 	@JoinColumn(name="cd_tecnico")
 	private Tecnico tecnico;
 	
-	@OneToMany(mappedBy="time")
-	private List<Jogador> jogador;
+	@OneToMany(mappedBy="time", cascade=CascadeType.PERSIST)
+	private List<Jogador> jogadores = new ArrayList<>();
+	
+	public void adicionarJogador(Jogador jogador) { // esse método só serve para o metodo ONETOMANY
+		jogadores.add(jogador);// adiciona na lista
+		jogador.setTime(this);//set o time do jogador
+	}
+	
+	@ManyToMany(cascade=CascadeType.PERSIST)
+	@JoinTable(name="T_PATROCINIO_TIME", 
+			joinColumns= @JoinColumn(name="cd_time"),
+			inverseJoinColumns=@JoinColumn(name="cd_patrocinio"))
+	
+	private List<Patrocinio> patrocinios;
+	
+
+	public Time() {
+		super();
+	}
 	
 	public Time(String nome, long numeroSocios, Tecnico tecnico) {
 		super();
@@ -44,9 +64,7 @@ public class Time {
 		this.numeroSocios = numeroSocios;
 		this.tecnico = tecnico;
 	}
-	public Time() {
-		super();
-	}
+	
 	public int getCodigo() {
 		return codigo;
 	}
@@ -71,11 +89,19 @@ public class Time {
 	public void setTecnico(Tecnico tecnico) {
 		this.tecnico = tecnico;
 	}
-	public List<Jogador> getJogador() {
-		return jogador;
+	public List<Jogador> getJogadores() {
+		return jogadores;
 	}
-	public void setJogador(List<Jogador> jogador) {
-		this.jogador = jogador;
+	public void setJogadores(List<Jogador> jogadores) {
+		this.jogadores = jogadores;
+	}
+
+	public List<Patrocinio> getPatrocinios() {
+		return patrocinios;
+	}
+
+	public void setPatrocinios(List<Patrocinio> patrocinios) {
+		this.patrocinios = patrocinios;
 	}
 	
 	
