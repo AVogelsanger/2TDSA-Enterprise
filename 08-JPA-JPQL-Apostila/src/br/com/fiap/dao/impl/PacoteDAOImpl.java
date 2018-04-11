@@ -27,7 +27,17 @@ public class PacoteDAOImpl extends GenericDAOImpl<Pacote,Integer> implements Pac
 	public List<Pacote> buscarPorData(Calendar inicio, Calendar fim) {
 		
 		return em.createQuery("from Pacote p where p.dataSaida between :dataI and :dataF", Pacote.class)
-				.setParameter("dataI", inicio).setParameter("dataF", fim).getResultList();
+				.setParameter("dataI", inicio)
+				.setParameter("dataF", fim)
+				.getResultList();
 	}
+
+	@Override
+	public double mediaPrecoPacotes() {
+		
+		return em.createQuery("select avg(p.preco) from Pacote p" , Double.class).getSingleResult();
+	}
+
+
 
 }

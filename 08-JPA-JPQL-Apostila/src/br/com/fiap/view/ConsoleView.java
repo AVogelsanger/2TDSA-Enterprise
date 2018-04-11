@@ -1,5 +1,8 @@
 package br.com.fiap.view;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -9,10 +12,12 @@ import br.com.fiap.dao.CidadeDAO;
 import br.com.fiap.dao.ClienteDAO;
 import br.com.fiap.dao.EntityManagerFactorySingleton;
 import br.com.fiap.dao.PacoteDAO;
+import br.com.fiap.dao.ReservaDAO;
 import br.com.fiap.dao.TransporteDAO;
 import br.com.fiap.dao.impl.CidadeDAOImpl;
 import br.com.fiap.dao.impl.ClienteDAOImpl;
 import br.com.fiap.dao.impl.PacoteDAOImpl;
+import br.com.fiap.dao.impl.ReservaDAOImpl;
 import br.com.fiap.dao.impl.TransporteDAOImpl;
 import br.com.fiap.entity.Cidade;
 import br.com.fiap.entity.Cliente;
@@ -86,9 +91,55 @@ public class ConsoleView {
 			System.out.println(cliente.getNome());
 		}
 		
-		//BUSCAR POR DATAS ==========================================================================
+		// BUSCAR POR DATAS DE SAIDA ==================================================================
+		Calendar inicio = new GregorianCalendar(2015, Calendar.MAY,2);
+		Calendar fim = new GregorianCalendar(2018, Calendar.MAY,2);
+		listaPacote = pacoteDao.buscarPorData(inicio, fim);
+		System.out.println("Buscar pacotes por data");
+		for (Pacote pacote : listaPacote) {
+			System.out.println(pacote.getDescricao());
+		}
+		
+		// BUSCAR CLIENTES POR NOME E CIDADE =============================================================
+		listaCliente = clienteDao.buscar("a", "a");
+		System.out.println("Buscar cliente por nome e cidade");
+		for (Cliente cliente : listaCliente) {
+			System.out.println(cliente.getNome() + " - " + cliente.getEndereco().getCidade().getNome());
+		}
+		
+		// RETORNA TODOS OS CLIENTES CONFORME OS ESTADOS PASSADOS COMO PARAMETRO ==========================
+		List<String> estados = new ArrayList<>();
+		estados.add("SP");
+		estados.add("RJ");
+		estados.add("BA");
+		estados.add("TO");
+		estados.add("RR");
+		estados.add("GO");
+		listaCliente = clienteDao.buscarPorEstados(estados);
+		for (Cliente c : listaCliente) {
+			System.out.println(c.getNome() + "" + c.getEndereco().getCidade().getUf());
+		}
 		
 		
+		// LISTAR OS TRANSPORTES (GENERIC DAO) =============================================================
+		List<Transporte> transportes = transDao.listar();
+		System.out.println("LISTAR TRANSPORTES");
+		for (Transporte t : transportes) {
+			System.out.println(t.getEmpresa());
+		}
+		
+		// EXIBIR A QUANTIDADE  DE CLIENTES CADASTRADOS
+		System.out.println("Clientes: " + clienteDao.contarTotal());
+		
+		// CALCULAR A MÉDIA DOS PREÇOS DOS PACOTES ========================================================
+		System.out.println("Pacotes: " + pacoteDao.mediaPrecoPacotes());
+		
+		// CONTAR A QUANTIDADE DE CLIENTE POR ESTADO ======================================================
+		System.out.println("Quantidade de clientes em SP: " + clienteDao.contarPorEstado("SP"));
+		
+		// CONTAR A QUANTIDADE DE RESERVA POR CLIENTE
+		ReservaDAO reservaDao = new ReservaDAOImpl(em);
+		System.out.println("Reservas: " + reservaDao.contarPorCliente(clienteDao.pesquisar(2)));
 		
 		em.close();
 		fabrica.close();
