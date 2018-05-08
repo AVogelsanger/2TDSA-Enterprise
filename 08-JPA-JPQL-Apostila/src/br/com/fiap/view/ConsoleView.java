@@ -141,6 +141,21 @@ public class ConsoleView {
 		ReservaDAO reservaDao = new ReservaDAOImpl(em);
 		System.out.println("Reservas: " + reservaDao.contarPorCliente(clienteDao.pesquisar(2)));
 		
+		
+		//Buscar Pacotes por descricao
+		listaPacote = pacoteDao.buscarPorDescricao("a");
+		System.out.println("BUSCA PACOTE POR DESCRIÇÃO");
+		for (Pacote p : listaPacote) {
+			System.out.println(p.getDescricao());
+		}
+		
+		//BUSCAR O CLIENTES QUE POSSUAM MAIOR NUMERO DE RESERVA
+		listaCliente = clienteDao.buscarMaiorNumeroReserva();
+		for (Cliente c : listaCliente) {
+			System.out.println(c.getNome());
+			System.out.println(reservaDao.contarPorCliente(c));
+		}
+		
 		em.close();
 		fabrica.close();
 	}

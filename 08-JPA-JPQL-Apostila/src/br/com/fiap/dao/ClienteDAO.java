@@ -22,5 +22,5 @@ public interface ClienteDAO extends GenericDAO<Cliente,Integer>{
 	
 	long contarPorEstado(String uf);
 	
-	List<Cliente> maiorNumeroReserva();
+	List<Cliente> buscarMaiorNumeroReserva();
 }

@@ -73,9 +73,14 @@ public class ClienteDAOImpl extends GenericDAOImpl<Cliente,Integer> implements C
 	}
 
 	@Override
-	public List<Cliente> maiorNumeroReserva() {
+	public List<Cliente> buscarMaiorNumeroReserva() {
 		
-		return null;
+		return em.createQuery("from Cliente c where c.id in " 
+		    + "(select r.cliente.id from Reserva r group by "
+			+ "r.cliente having count(r) = "
+		    + "(select max(count(rm) from Reserva rm group "
+			+ "by rm.cliente))", Cliente.class).getResultList();  
+		 
 	}
 
 }
