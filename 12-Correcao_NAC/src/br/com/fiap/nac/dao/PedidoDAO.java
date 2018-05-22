@@ -1,0 +1,8 @@
+package br.com.fiap.nac.dao;
+
+import br.co.fiap.nac.entity.Pedido;
+
+public interface PedidoDAO extends GenericDAO<Pedido, Integer> {
+
+	long contarPorCliente(int codigoCliente);
+}
